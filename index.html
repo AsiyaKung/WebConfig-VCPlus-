@@ -13,23 +13,24 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #232946 0%, #16161a 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #e5e7eb;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 41, 59, 0.98);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
+            background: linear-gradient(135deg, #232946 0%, #4f46e5 100%);
+            color: #f4f4f5;
             padding: 30px;
             text-align: center;
         }
@@ -37,7 +38,7 @@
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .header p {
@@ -54,28 +55,29 @@
             flex-wrap: wrap;
             gap: 5px;
             margin-bottom: 30px;
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 2px solid #232946;
         }
 
         .tab {
             padding: 15px 25px;
-            background: #f8fafc;
+            background: #232946;
             border: none;
             border-radius: 10px 10px 0 0;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
-            color: #64748b;
+            color: #a1a1aa;
         }
 
         .tab.active {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
+            background: linear-gradient(135deg, #4f46e5 0%, #232946 100%);
+            color: #fff;
             transform: translateY(-2px);
         }
 
         .tab:hover:not(.active) {
-            background: #e2e8f0;
+            background: #16161a;
+            color: #fff;
             transform: translateY(-1px);
         }
 
@@ -94,15 +96,15 @@
         }
 
         .section {
-            background: #f8fafc;
+            background: #16161a;
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #232946;
         }
 
         .section h3 {
-            color: #1e293b;
+            color: #e5e7eb;
             margin-bottom: 20px;
             font-size: 1.4em;
             display: flex;
@@ -113,7 +115,7 @@
         .section-icon {
             width: 24px;
             height: 24px;
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #232946 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -130,7 +132,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #374151;
+            color: #cbd5e1;
         }
 
         .form-group input,
@@ -138,11 +140,12 @@
         .form-group textarea {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid #232946;
             border-radius: 10px;
             font-size: 14px;
             transition: all 0.3s ease;
-            background: white;
+            background: #232946;
+            color: #f4f4f5;
         }
 
         .form-group input:focus,
@@ -150,7 +153,7 @@
         .form-group textarea:focus {
             outline: none;
             border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
         }
 
         .checkbox-group {
@@ -167,10 +170,10 @@
         }
 
         .list-container {
-            border: 2px solid #e5e7eb;
+            border: 2px solid #232946;
             border-radius: 10px;
             padding: 15px;
-            background: white;
+            background: #232946;
             min-height: 120px;
         }
 
@@ -179,10 +182,11 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px;
-            background: #f1f5f9;
+            background: #16161a;
             margin-bottom: 8px;
             border-radius: 8px;
             border-left: 4px solid #4f46e5;
+            color: #e5e7eb;
         }
 
         .list-item:last-child {
@@ -197,6 +201,9 @@
 
         .add-item input {
             flex: 1;
+            background: #232946;
+            color: #f4f4f5;
+            border: 2px solid #232946;
         }
 
         .btn {
@@ -210,7 +217,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #232946 100%);
             color: white;
         }
 
@@ -220,12 +227,12 @@
         }
 
         .btn-secondary {
-            background: #6b7280;
-            color: white;
+            background: #232946;
+            color: #e5e7eb;
         }
 
         .btn-secondary:hover {
-            background: #4b5563;
+            background: #16161a;
         }
 
         .btn-danger {
@@ -252,7 +259,7 @@
             justify-content: center;
             margin-top: 40px;
             padding-top: 30px;
-            border-top: 2px solid #e5e7eb;
+            border-top: 2px solid #232946;
         }
 
         .grid {
@@ -262,8 +269,8 @@
         }
 
         .config-output {
-            background: #1e293b;
-            color: #e2e8f0;
+            background: #16161a;
+            color: #e5e7eb;
             padding: 20px;
             border-radius: 10px;
             font-family: 'Courier New', monospace;
@@ -281,7 +288,7 @@
             background: #10b981;
             color: white;
             border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             z-index: 1000;
             transform: translateX(100%);
             transition: transform 0.3s ease;
@@ -297,7 +304,7 @@
 
         .help-text {
             font-size: 12px;
-            color: #6b7280;
+            color: #a1a1aa;
             margin-top: 5px;
         }
 
@@ -305,11 +312,11 @@
             position: absolute;
             top: 20px;
             right: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(36, 37, 46, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 25px;
             padding: 8px 16px;
-            color: white;
+            color: #f4f4f5;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -317,7 +324,7 @@
         }
 
         .language-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(36, 37, 46, 0.9);
             transform: translateY(-2px);
         }
 
