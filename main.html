@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Farm Config Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            background: #f8fafc;
+            border: none;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #64748b;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab:hover:not(.active) {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section h3 {
+            color: #1e293b;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #4f46e5;
+        }
+
+        .list-container {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 15px;
+            background: white;
+            min-height: 120px;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f1f5f9;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .list-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .add-item {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .add-item input {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .config-output {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #10b981;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 8px 16px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .language-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .language-toggle {
+                position: static;
+                margin-bottom: 15px;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="language-toggle" onclick="toggleLanguage()">
+                <span id="langToggleText">🇬🇧 English</span>
+            </button>
+            <h1 id="headerTitle">🌱 Auto Farm Config Editor</h1>
+            <p id="headerSubtitle">ปรับแต่งการตั้งค่าสำหรับระบบ Auto Farm</p>
+        </div>
+
+        <div class="content">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('basic')" data-th="⚙️ การตั้งค่าพื้นฐาน" data-en="⚙️ Basic Settings">⚙️ การตั้งค่าพื้นฐาน</button>
+                <button class="tab" onclick="showTab('seeds')" data-th="🌱 Seeds & Crops" data-en="🌱 Seeds & Crops">🌱 Seeds & Crops</button>
+                <button class="tab" onclick="showTab('eggs')" data-th="🥚 Eggs & Pets" data-en="🥚 Eggs & Pets">🥚 Eggs & Pets</button>
+                <button class="tab" onclick="showTab('shop')" data-th="🛒 Shop & Events" data-en="🛒 Shop & Events">🛒 Shop & Events</button>
+                <button class="tab" onclick="showTab('advanced')" data-th="🔧 ขั้นสูง" data-en="🔧 Advanced">🔧 ขั้นสูง</button>
+            </div>
+
+            <!-- Basic Settings -->
+            <div id="basic" class="tab-content active">
+                <div class="grid">
+                    <div class="section">
+                        <h3><span class="section-icon">⚙️</span><span data-th="การตั้งค่าหลัก" data-en="Main Settings">การตั้งค่าหลัก</span></h3>
+                        
+                        <div class="form-group">
+                            <label data-th="ระยะเวลารอ (วินาที)" data-en="Wait Time (seconds)">ระยะเวลารอ (วินาที)</label>
+                            <input type="number" id="waitTime" value="10" min="1" max="60">
+                            <div class="help-text" data-th="ถ้าเปิดหลายจอแนะนำให้ตั้งเป็น 20 วินาที" data-en="If opening multiple screens, recommend setting to 20 seconds">ถ้าเปิดหลายจอแนะนำให้ตั้งเป็น 20 วินาที</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-th="จำนวน Crop สูงสุดในฟาร์ม" data-en="Maximum Crops in Farm">จำนวน Crop สูงสุดในฟาร์ม</label>
+                            <input type="number" id="maxCropInFarm" value="500" min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-th="จำนวนเงินขั้นต่ำในการซื้อ" data-en="Minimum Money for Purchase">จำนวนเงินขั้นต่ำในการซื้อ</label>
+                            <input type="number" id="moneyEnough" value="100000" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-th="จำนวนการเก็บของต่อครั้ง" data-en="Collection Batch Size">จำนวนการเก็บของต่อครั้ง</label>
+                            <input type="number" id="collectBatch" value="20" min="1">
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3><span class="section-icon">🔧</span><span data-th="ฟีเจอร์ต่างๆ" data-en="Features">ฟีเจอร์ต่างๆ</span></h3>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="openEgg" checked>
+                            <label for="openEgg">Auto Open Egg</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="placeEgg" checked>
+                            <label for="placeEgg">Auto Place Egg</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="buyEgg" checked>
+                            <label for="buyEgg">Auto Buy Egg</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="autoFeedPets" checked>
+                            <label for="autoFeedPets">Auto Feed Pets</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="autoEvent" checked>
+                            <label for="autoEvent">Auto Event</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="autoFavEvent" checked>
+                            <label for="autoFavEvent">Auto Fav Event</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="openSeedPack" checked>
+                            <label for="openSeedPack">Open Seed Pack</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="fpsBoost" checked>
+                            <label for="fpsBoost">FPS Boost</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seeds & Crops -->
+            <div id="seeds" class="tab-content">
+                <div class="grid">
+                    <div class="section">
+                        <h3><span class="section-icon">🌱</span><span data-th="Seeds ที่ต้องการ Farm" data-en="Seeds to Farm">Seeds ที่ต้องการ Farm</span></h3>
+                        <div class="list-container" id="seedsList"></div>
+                        <div class="add-item">
+                            <input type="text" id="newSeed" data-th="ใส่ชื่อ Seed" data-en="Enter Seed Name" placeholder="ใส่ชื่อ Seed">
+                            <button class="btn btn-primary" onclick="addSeed()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3><span class="section-icon">🛒</span><span data-th="Seeds ที่ต้องการซื้อ" data-en="Seeds to Buy">Seeds ที่ต้องการซื้อ</span></h3>
+                        <div class="list-container" id="buySeedsList"></div>
+                        <div class="add-item">
+                            <input type="text" id="newBuySeed" data-th="ใส่ชื่อ Seed" data-en="Enter Seed Name" placeholder="ใส่ชื่อ Seed">
+                            <button class="btn btn-primary" onclick="addBuySeed()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3><span class="section-icon">🌸</span><span data-th="Flower Seed Pack" data-en="Flower Seed Pack">Flower Seed Pack</span></h3>
+                    <div class="form-group">
+                        <label data-th="เปิด Flower Seed Pack เมื่อมีมากกว่า" data-en="Open Flower Seed Pack when more than">เปิด Flower Seed Pack เมื่อมีมากกว่า</label>
+                        <input type="number" id="openFlowerSeedPack" value="30" min="1">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Eggs & Pets -->
+            <div id="eggs" class="tab-content">
+                <div class="grid">
+                    <div class="section">
+                        <h3><span class="section-icon">🥚</span><span data-th="Eggs ที่ต้องการ Farm" data-en="Eggs to Farm">Eggs ที่ต้องการ Farm</span></h3>
+                        <div class="list-container" id="eggsList"></div>
+                        <div class="add-item">
+                            <input type="text" id="newEgg" data-th="ใส่ชื่อ Egg" data-en="Enter Egg Name" placeholder="ใส่ชื่อ Egg">
+                            <button class="btn btn-primary" onclick="addEgg()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3><span class="section-icon">🛒</span><span data-th="Eggs ที่ต้องการซื้อ" data-en="Eggs to Buy">Eggs ที่ต้องการซื้อ</span></h3>
+                        <div class="list-container" id="buyEggsList"></div>
+                        <div class="add-item">
+                            <input type="text" id="newBuyEgg" data-th="ใส่ชื่อ Egg" data-en="Enter Egg Name" placeholder="ใส่ชื่อ Egg">
+                            <button class="btn btn-primary" onclick="addBuyEgg()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="section">
+                        <h3><span class="section-icon">🐕</span><span data-th="Pet Names สำหรับ Farm" data-en="Pet Names for Farm">Pet Names สำหรับ Farm</span></h3>
+                        <div class="list-container" id="petNamesList"></div>
+                        <div class="add-item">
+                            <input type="text" id="newPetName" data-th="ใส่ชื่อ Pet" data-en="Enter Pet Name" placeholder="ใส่ชื่อ Pet">
+                            <button class="btn btn-primary" onclick="addPetName()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3><span class="section-icon">💰</span><span data-th="Pet Names ที่ต้องการขาย" data-en="Pet Names to Sell">Pet Names ที่ต้องการขาย</span></h3>
+                        <div class="list-container" id="sellPetsList"></div>
+                        <div class="add-item">
+                            <input type="text" id="newSellPet" data-th="ใส่ชื่อ Pet" data-en="Enter Pet Name" placeholder="ใส่ชื่อ Pet">
+                            <button class="btn btn-primary" onclick="addSellPet()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3><span class="section-icon">🔧</span><span data-th="การตั้งค่าขาย Pet" data-en="Pet Selling Settings">การตั้งค่าขาย Pet</span></h3>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label data-th="ขาย Pet เมื่อมีมากกว่า" data-en="Sell Pet when more than">ขาย Pet เมื่อมีมากกว่า</label>
+                            <input type="number" id="sellPetMinCount" value="3" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label data-th="เก็บ Pet ไว้จำนวน" data-en="Keep Pet amount">เก็บ Pet ไว้จำนวน</label>
+                            <input type="number" id="sellPetKeepCount" value="1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label data-th="เก็บ Pet ตามน้ำหนัก" data-en="Keep Pet by weight">เก็บ Pet ตามน้ำหนัก</label>
+                            <input type="number" id="sellPetKeepWeight" value="10" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop & Events -->
+            <div id="shop" class="tab-content">
+                <div class="grid">
+                    <div class="section">
+                        <h3><span class="section-icon">🛍️</span><span data-th="Gear Shop" data-en="Gear Shop">Gear Shop</span></h3>
+                        <div class="list-container" id="buyGearList"></div>
+                        <div class="add-item">
+                            <input type="text" id="newBuyGear" data-th="ใส่ชื่อ Gear" data-en="Enter Gear Name" placeholder="ใส่ชื่อ Gear">
+                            <button class="btn btn-primary" onclick="addBuyGear()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3><span class="section-icon">🦕</span><span data-th="Pet Dino สำหรับ Evo" data-en="Pet Dino for Evo">Pet Dino สำหรับ Evo</span></h3>
+                        <div class="list-container" id="petDinoList"></div>
+                        <div class="add-item">
+                            <input type="text" id="newPetDino" data-th="ใส่ชื่อ Pet" data-en="Enter Pet Name" placeholder="ใส่ชื่อ Pet">
+                            <button class="btn btn-primary" onclick="addPetDino()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3><span class="section-icon">🎨</span><span data-th="Craft Event" data-en="Craft Event">Craft Event</span></h3>
+                    <div class="list-container" id="craftEventList"></div>
+                    <div class="add-item">
+                        <input type="text" id="newCraftEventName" data-th="ชื่อ Item" data-en="Item Name" placeholder="ชื่อ Item">
+                        <input type="number" id="newCraftEventAmount" data-th="จำนวน" data-en="Amount" placeholder="จำนวน" min="1">
+                        <button class="btn btn-primary" onclick="addCraftEvent()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3><span class="section-icon">🎪</span><span data-th="Event Shop" data-en="Event Shop">Event Shop</span></h3>
+                    <div class="list-container" id="eventShopList"></div>
+                    <div class="add-item">
+                        <input type="text" id="newEventShopName" data-th="ชื่อ Event" data-en="Event Name" placeholder="ชื่อ Event">
+                        <input type="number" id="newEventShopAmount" data-th="จำนวน" data-en="Amount" placeholder="จำนวน" min="1">
+                        <button class="btn btn-primary" onclick="addEventShop()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div id="advanced" class="tab-content">
+                <div class="grid">
+                    <div class="section">
+                        <h3><span class="section-icon">⬆️</span><span data-th="Auto Upgrade" data-en="Auto Upgrade">Auto Upgrade</span></h3>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="upgradePetSlot">
+                            <label for="upgradePetSlot" data-th="Auto Upgrade Pet Slot" data-en="Auto Upgrade Pet Slot">Auto Upgrade Pet Slot</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="upgradeEggSlot">
+                            <label for="upgradeEggSlot" data-th="Auto Upgrade Egg Slot" data-en="Auto Upgrade Egg Slot">Auto Upgrade Egg Slot</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="upgradePetInventory">
+                            <label for="upgradePetInventory" data-th="Auto Upgrade Pet Inventory" data-en="Auto Upgrade Pet Inventory">Auto Upgrade Pet Inventory</label>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3><span class="section-icon">🔔</span><span data-th="การแจ้งเตือน" data-en="Notifications">การแจ้งเตือน</span></h3>
+                        
+                        <div class="form-group">
+                            <label data-th="Discord Webhook URL" data-en="Discord Webhook URL">Discord Webhook URL</label>
+                            <input type="url" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-th="Pet ที่ต้องการแจ้งเตือน" data-en="Pets to Notify">Pet ที่ต้องการแจ้งเตือน</label>
+                            <div class="list-container" id="notifyPetsList"></div>
+                            <div class="add-item">
+                                <input type="text" id="newNotifyPet" data-th="ใส่ชื่อ Pet" data-en="Enter Pet Name" placeholder="ใส่ชื่อ Pet">
+                                <button class="btn btn-primary" onclick="addNotifyPet()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3><span class="section-icon">⏰</span><span data-th="เวลาในการเก็บของ" data-en="Collection Time Settings">เวลาในการเก็บของ</span></h3>
+                    <div class="list-container" id="collectMinutesList"></div>
+                    <div class="add-item">
+                        <input type="number" id="newCollectMoney" data-th="จำนวนเงิน" data-en="Money Amount" placeholder="จำนวนเงิน" min="0">
+                        <input type="number" id="newCollectMinutes" data-th="นาที" data-en="Minutes" placeholder="นาที" min="1">
+                        <button class="btn btn-primary" onclick="addCollectMinutes()" data-th="เพิ่ม" data-en="Add">เพิ่ม</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-success" onclick="generateConfig()" data-th="🚀 สร้าง Config" data-en="🚀 Generate Config">🚀 สร้าง Config</button>
+                <button class="btn btn-secondary" onclick="loadDefaultConfig()" data-th="🔄 โหลดค่าเริ่มต้น" data-en="🔄 Load Default">🔄 โหลดค่าเริ่มต้น</button>
+                <button class="btn btn-primary" onclick="copyConfig()" data-th="📋 คัดลอก Config" data-en="📋 Copy Config">📋 คัดลอก Config</button>
+            </div>
+
+            <div id="configOutput" class="config-output" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Language system
+        let currentLanguage = 'th'; // Default to Thai
+        
+        // Language switching function
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'th' ? 'en' : 'th';
+            updateLanguage();
+        }
+        
+        // Update all text elements based on current language
+        function updateLanguage() {
+            const langToggle = document.getElementById('langToggleText');
+            const htmlElement = document.documentElement;
+            
+            // Update language attribute
+            htmlElement.setAttribute('lang', currentLanguage);
+            
+            // Update toggle button text
+            langToggle.textContent = currentLanguage === 'th' ? '🇬🇧 English' : '🇹🇭 ไทย';
+            
+            // Update header
+            const headerTitle = document.getElementById('headerTitle');
+            const headerSubtitle = document.getElementById('headerSubtitle');
+            
+            if (currentLanguage === 'en') {
+                headerTitle.textContent = '🌱 Auto Farm Config Editor';
+                headerSubtitle.textContent = 'Customize settings for Auto Farm system';
+            } else {
+                headerTitle.textContent = '🌱 Auto Farm Config Editor';
+                headerSubtitle.textContent = 'ปรับแต่งการตั้งค่าสำหรับระบบ Auto Farm';
+            }
+            
+            // Update all elements with data-th and data-en attributes
+            document.querySelectorAll('[data-th][data-en]').forEach(element => {
+                const thaiText = element.getAttribute('data-th');
+                const englishText = element.getAttribute('data-en');
+                
+                if (currentLanguage === 'en') {
+                    element.textContent = englishText;
+                    // Update placeholder for input elements
+                    if (element.tagName === 'INPUT' && element.placeholder) {
+                        element.placeholder = englishText;
+                    }
+                } else {
+                    element.textContent = thaiText;
+                    // Update placeholder for input elements
+                    if (element.tagName === 'INPUT' && element.placeholder) {
+                        element.placeholder = thaiText;
+                    }
+                }
+            });
+            
+            // Update delete button text in lists
+            updateDeleteButtonText();
+        }
+        
+        // Update delete button text
+        function updateDeleteButtonText() {
+            const deleteText = currentLanguage === 'en' ? 'Delete' : 'ลบ';
+            document.querySelectorAll('.list-item .btn-danger').forEach(btn => {
+                btn.textContent = deleteText;
+            });
+        }
+
+        // Configuration data
+        let config = {
+            waitTime: 10,
+            seeds: ["Bamboo", "Carrot", "Orange Tulip", "Watermelon", "Pumpkin", "Daffodil", "Mushroom", "Nightshade", "Beanstalk"],
+            buySeeds: ["Bamboo", "Carrot", "Orange Tulip", "Watermelon", "Pumpkin", "Daffodil", "Mushroom", "Nightshade", "Beanstalk"],
+            eggs: ["Legendary Egg", "Mythical Egg", "Bug Egg", "Night Egg", "Bee Egg", "Anti Bee Egg", "Paradise Egg", "Dinosaur Egg"],
+            buyEggs: ["Legendary Egg", "Mythical Egg", "Bug Egg", "Bee Egg", "Paradise Egg"],
+            petNames: [],
+            sellPets: [],
+            petToUpgrade: [],
+            buyGear: [],
+            petDino: ["Dog"],
+            craftEvent: [
+                { name: "Crafters Seed Pack", amount: 2 },
+                { name: "Anti Bee Egg", amount: 2 }
+            ],
+            eventShop: [
+                { name: "Summer Seed Pack", amount: 2 },
+                { name: "Oasis Egg", amount: 2 }
+            ],
+            notifyPets: ["Dragonfly", "Raccoon", "Red Fox", "Praying Mantis", "Queen Bee"],
+            collectMinutes: [
+                { money: 100000, minutes: 10 },
+                { money: 0, minutes: 1 }
+            ],
+            // Settings
+            sellPetMinCount: 3,
+            sellPetKeepCount: 1,
+            sellPetKeepWeight: 10,
+            openEgg: true,
+            placeEgg: true,
+            buyEgg: true,
+            maxCropInFarm: 500,
+            upgradePetSlot: false,
+            upgradeEggSlot: false,
+            upgradePetInventory: false,
+            autoFeedPets: true,
+            autoEvent: true,
+            autoFavEvent: true,
+            openSeedPack: true,
+            openFlowerSeedPack: 30,
+            moneyEnough: 100000,
+            fpsBoost: true,
+            webhookUrl: "",
+            collectBatch: 20
+        };
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to selected tab
+            event.target.classList.add('active');
+        }
+
+        // Generic list management functions
+        function createListItem(text, onDelete, isComplex = false) {
+            const item = document.createElement('div');
+            item.className = 'list-item';
+            const deleteText = currentLanguage === 'en' ? 'Delete' : 'ลบ';
+            
+            if (isComplex) {
+                item.innerHTML = `
+                    <span>${text}</span>
+                    <button class="btn btn-danger" onclick="${onDelete}">${deleteText}</button>
+                `;
+            } else {
+                item.innerHTML = `
+                    <span>${text}</span>
+                    <button class="btn btn-danger" onclick="${onDelete}">${deleteText}</button>
+                `;
+            }
+            
+            return item;
+        }
+
+        function updateList(containerId, items, deleteFunction, isComplex = false) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            items.forEach((item, index) => {
+                let displayText;
+                let deleteFunc;
+                
+                if (isComplex) {
+                    displayText = `${item.name} (${item.amount})`;
+                    deleteFunc = `${deleteFunction}(${index})`;
+                } else {
+                    displayText = item;
+                    deleteFunc = `${deleteFunction}(${index})`;
+                }
+                
+                container.appendChild(createListItem(displayText, deleteFunc, isComplex));
+            });
+        }
+
+        // Seeds management
+        function addSeed() {
+            const input = document.getElementById('newSeed');
+            if (input.value.trim()) {
+                config.seeds.push(input.value.trim());
+                input.value = '';
+                updateList('seedsList', config.seeds, 'removeSeed');
+            }
+        }
+
+        function removeSeed(index) {
+            config.seeds.splice(index, 1);
+            updateList('seedsList', config.seeds, 'removeSeed');
+        }
+
+        function addBuySeed() {
+            const input = document.getElementById('newBuySeed');
+            if (input.value.trim()) {
+                config.buySeeds.push(input.value.trim());
+                input.value = '';
+                updateList('buySeedsList', config.buySeeds, 'removeBuySeed');
+            }
+        }
+
+        function removeBuySeed(index) {
+            config.buySeeds.splice(index, 1);
+            updateList('buySeedsList', config.buySeeds, 'removeBuySeed');
+        }
+
+        // Eggs management
+        function addEgg() {
+            const input = document.getElementById('newEgg');
+            if (input.value.trim()) {
+                config.eggs.push(input.value.trim());
+                input.value = '';
+                updateList('eggsList', config.eggs, 'removeEgg');
+            }
+        }
+
+        function removeEgg(index) {
+            config.eggs.splice(index, 1);
+            updateList('eggsList', config.eggs, 'removeEgg');
+        }
+
+        function addBuyEgg() {
+            const input = document.getElementById('newBuyEgg');
+            if (input.value.trim()) {
+                config.buyEggs.push(input.value.trim());
+                input.value = '';
+                updateList('buyEggsList', config.buyEggs, 'removeBuyEgg');
+            }
+        }
+
+        function removeBuyEgg(index) {
+            config.buyEggs.splice(index, 1);
+            updateList('buyEggsList', config.buyEggs, 'removeBuyEgg');
+        }
+
+        // Pet Names management
+        function addPetName() {
+            const input = document.getElementById('newPetName');
+            if (input.value.trim()) {
+                config.petNames.push(input.value.trim());
+                input.value = '';
+                updateList('petNamesList', config.petNames, 'removePetName');
+            }
+        }
+
+        function removePetName(index) {
+            config.petNames.splice(index, 1);
+            updateList('petNamesList', config.petNames, 'removePetName');
+        }
+
+        function addSellPet() {
+            const input = document.getElementById('newSellPet');
+            if (input.value.trim()) {
+                config.sellPets.push(input.value.trim());
+                input.value = '';
+                updateList('sellPetsList', config.sellPets, 'removeSellPet');
+            }
+        }
+
+        function removeSellPet(index) {
+            config.sellPets.splice(index, 1);
+            updateList('sellPetsList', config.sellPets, 'removeSellPet');
+        }
+
+        // Gear management
+        function addBuyGear() {
+            const input = document.getElementById('newBuyGear');
+            if (input.value.trim()) {
+                config.buyGear.push(input.value.trim());
+                input.value = '';
+                updateList('buyGearList', config.buyGear, 'removeBuyGear');
+            }
+        }
+
+        function removeBuyGear(index) {
+            config.buyGear.splice(index, 1);
+            updateList('buyGearList', config.buyGear, 'removeBuyGear');
+        }
+
+        function addPetDino() {
+            const input = document.getElementById('newPetDino');
+            if (input.value.trim()) {
+                config.petDino.push(input.value.trim());
+                input.value = '';
+                updateList('petDinoList', config.petDino, 'removePetDino');
+            }
+        }
+
+        function removePetDino(index) {
+            config.petDino.splice(index, 1);
+            updateList('petDinoList', config.petDino, 'removePetDino');
+        }
+
+        // Craft Event management
+        function addCraftEvent() {
+            const nameInput = document.getElementById('newCraftEventName');
+            const amountInput = document.getElementById('newCraftEventAmount');
+            
+            if (nameInput.value.trim() && amountInput.value) {
+                config.craftEvent.push({
+                    name: nameInput.value.trim(),
+                    amount: parseInt(amountInput.value)
+                });
+                nameInput.value = '';
+                amountInput.value = '';
+                updateList('craftEventList', config.craftEvent, 'removeCraftEvent', true);
+            }
+        }
+
+        function removeCraftEvent(index) {
+            config.craftEvent.splice(index, 1);
+            updateList('craftEventList', config.craftEvent, 'removeCraftEvent', true);
+        }
+
+        // Event Shop management
+        function addEventShop() {
+            const nameInput = document.getElementById('newEventShopName');
+            const amountInput = document.getElementById('newEventShopAmount');
+            
+            if (nameInput.value.trim() && amountInput.value) {
+                config.eventShop.push({
+                    name: nameInput.value.trim(),
+                    amount: parseInt(amountInput.value)
+                });
+                nameInput.value = '';
+                amountInput.value = '';
+                updateList('eventShopList', config.eventShop, 'removeEventShop', true);
+            }
+        }
+
+        function removeEventShop(index) {
+            config.eventShop.splice(index, 1);
+            updateList('eventShopList', config.eventShop, 'removeEventShop', true);
+        }
+
+        // Notify Pets management
+        function addNotifyPet() {
+            const input = document.getElementById('newNotifyPet');
+            if (input.value.trim()) {
+                config.notifyPets.push(input.value.trim());
+                input.value = '';
+                updateList('notifyPetsList', config.notifyPets, 'removeNotifyPet');
+            }
+        }
+
+        function removeNotifyPet(index) {
+            config.notifyPets.splice(index, 1);
+            updateList('notifyPetsList', config.notifyPets, 'removeNotifyPet');
+        }
+
+        // Collect Minutes management
+        function addCollectMinutes() {
+            const moneyInput = document.getElementById('newCollectMoney');
+            const minutesInput = document.getElementById('newCollectMinutes');
+            
+            if (moneyInput.value && minutesInput.value) {
+                config.collectMinutes.push({
+                    money: parseInt(moneyInput.value),
+                    minutes: parseInt(minutesInput.value)
+                });
+                moneyInput.value = '';
+                minutesInput.value = '';
+                updateCollectMinutesList();
+            }
+        }
+
+        function removeCollectMinutes(index) {
+            config.collectMinutes.splice(index, 1);
+            updateCollectMinutesList();
+        }
+
+        function updateCollectMinutesList() {
+            const container = document.getElementById('collectMinutesList');
+            container.innerHTML = '';
+            
+            config.collectMinutes.forEach((item, index) => {
+                const moneyLabel = currentLanguage === 'en' ? 'Money' : 'เงิน';
+                const timeLabel = currentLanguage === 'en' ? 'Time' : 'เวลา';
+                const minutesLabel = currentLanguage === 'en' ? 'minutes' : 'นาที';
+                const displayText = `${moneyLabel}: ${item.money.toLocaleString()} - ${timeLabel}: ${item.minutes} ${minutesLabel}`;
+                container.appendChild(createListItem(displayText, `removeCollectMinutes(${index})`, true));
+            });
+        }
+
+        // Initialize all lists
+        function initializeLists() {
+            updateList('seedsList', config.seeds, 'removeSeed');
+            updateList('buySeedsList', config.buySeeds, 'removeBuySeed');
+            updateList('eggsList', config.eggs, 'removeEgg');
+            updateList('buyEggsList', config.buyEggs, 'removeBuyEgg');
+            updateList('petNamesList', config.petNames, 'removePetName');
+            updateList('sellPetsList', config.sellPets, 'removeSellPet');
+            updateList('buyGearList', config.buyGear, 'removeBuyGear');
+            updateList('petDinoList', config.petDino, 'removePetDino');
+            updateList('craftEventList', config.craftEvent, 'removeCraftEvent', true);
+            updateList('eventShopList', config.eventShop, 'removeEventShop', true);
+            updateList('notifyPetsList', config.notifyPets, 'removeNotifyPet');
+            updateCollectMinutesList();
+        }
+
+        // Update form values
+        function updateFormValues() {
+            document.getElementById('waitTime').value = config.waitTime;
+            document.getElementById('maxCropInFarm').value = config.maxCropInFarm;
+            document.getElementById('moneyEnough').value = config.moneyEnough;
+            document.getElementById('collectBatch').value = config.collectBatch;
+            document.getElementById('sellPetMinCount').value = config.sellPetMinCount;
+            document.getElementById('sellPetKeepCount').value = config.sellPetKeepCount;
+            document.getElementById('sellPetKeepWeight').value = config.sellPetKeepWeight;
+            document.getElementById('openFlowerSeedPack').value = config.openFlowerSeedPack;
+            document.getElementById('webhookUrl').value = config.webhookUrl;
+            
+            // Checkboxes
+            document.getElementById('openEgg').checked = config.openEgg;
+            document.getElementById('placeEgg').checked = config.placeEgg;
+            document.getElementById('buyEgg').checked = config.buyEgg;
+            document.getElementById('autoFeedPets').checked = config.autoFeedPets;
+            document.getElementById('autoEvent').checked = config.autoEvent;
+            document.getElementById('autoFavEvent').checked = config.autoFavEvent;
+            document.getElementById('openSeedPack').checked = config.openSeedPack;
+            document.getElementById('fpsBoost').checked = config.fpsBoost;
+            document.getElementById('upgradePetSlot').checked = config.upgradePetSlot;
+            document.getElementById('upgradeEggSlot').checked = config.upgradeEggSlot;
+            document.getElementById('upgradePetInventory').checked = config.upgradePetInventory;
+        }
+
+        // Collect form values
+        function collectFormValues() {
+            config.waitTime = parseInt(document.getElementById('waitTime').value);
+            config.maxCropInFarm = parseInt(document.getElementById('maxCropInFarm').value);
+            config.moneyEnough = parseInt(document.getElementById('moneyEnough').value);
+            config.collectBatch = parseInt(document.getElementById('collectBatch').value);
+            config.sellPetMinCount = parseInt(document.getElementById('sellPetMinCount').value);
+            config.sellPetKeepCount = parseInt(document.getElementById('sellPetKeepCount').value);
+            config.sellPetKeepWeight = parseInt(document.getElementById('sellPetKeepWeight').value);
+            config.openFlowerSeedPack = parseInt(document.getElementById('openFlowerSeedPack').value);
+            config.webhookUrl = document.getElementById('webhookUrl').value;
+            
+            // Checkboxes
+            config.openEgg = document.getElementById('openEgg').checked;
+            config.placeEgg = document.getElementById('placeEgg').checked;
+            config.buyEgg = document.getElementById('buyEgg').checked;
+            config.autoFeedPets = document.getElementById('autoFeedPets').checked;
+            config.autoEvent = document.getElementById('autoEvent').checked;
+            config.autoFavEvent = document.getElementById('autoFavEvent').checked;
+            config.openSeedPack = document.getElementById('openSeedPack').checked;
+            config.fpsBoost = document.getElementById('fpsBoost').checked;
+            config.upgradePetSlot = document.getElementById('upgradePetSlot').checked;
+            config.upgradeEggSlot = document.getElementById('upgradeEggSlot').checked;
+            config.upgradePetInventory = document.getElementById('upgradePetInventory').checked;
+        }
+
+        // Generate config
+        function generateConfig() {
+            collectFormValues();
+            
+            const configScript = `
+repeat wait() until game:IsLoaded()
+task.wait(${config.waitTime}) -- ระยะเวลารอ ถ้าเปิดหลายจอเเนะนำให้ตั้งเป็น 20 วิ
+getgenv().Configuration = {
+    SEEDS = { -- กำหนด Seed ที่ต้องการให้ Farm
+${config.seeds.map(seed => `        "${seed}",`).join('\n')}
+    },
+    BuySeed = { -- กำหนด Seed ที่ต้องการซื้อจาก Seed Shop
+${config.buySeeds.map(seed => `        "${seed}",`).join('\n')}
+    },
+    EGG = { -- กำหนด Egg ที่ต้องการให้ Farm
+${config.eggs.map(egg => `        "${egg}",`).join('\n')}
+    },
+    BUYEGG = { -- กำหนด Egg ที่ต้องการซื้อจาก Egg Shop
+${config.buyEggs.map(egg => `        "${egg}",`).join('\n')}
+    },
+    PET_NAME = { -- กำหนกดชื่อ pet ที่ต้องการนำใส่ฟาร๋ม
+${config.petNames.map(pet => `        "${pet}",`).join('\n')}
+    },
+    SELL_PET = { -- กำหนดชื่อ pet ที่ต้องการขาย
+${config.sellPets.map(pet => `        "${pet}",`).join('\n')}
+    },
+    PETTOUPGRADE = { -- กำหนดชื่อ Pet ที่ต้องการนำไปใช้ในการ Upgrade
+${config.petToUpgrade.map(pet => `        "${pet}",`).join('\n')}
+    },
+    BUY_GEAR = { -- กำหนด Item ที่ต้องการซื้อจาก Gear Shop
+${config.buyGear.map(gear => `        "${gear}",`).join('\n')}
+    },
+    PetDino = { -- กำหนดชื่อ Pet ที่ต้องการใช้ในการ Evo
+${config.petDino.map(pet => `        "${pet}",`).join('\n')}
+    },
+    Craft_Event = { -- กำหนด Item ที่ต้องการ Craft ใน Event
+${config.craftEvent.map(item => `        { Name = "${item.name}", Amount = ${item.amount} },`).join('\n')}
+    },
+    EVENTSHOP = { -- กำหนดชื่อ Event ที่ต้องการทำ
+${config.eventShop.map(item => `        { Name = "${item.name}", Amount = ${item.amount} },`).join('\n')}
+    },
+    SELL_PET_MIN_COUNT = ${config.sellPetMinCount}, -- จำนวน Pet ที่จะขายเมื่อมีมากกว่าหรือเท่ากับจำนวนนี้
+    SELL_PET_KEEP_COUNT = ${config.sellPetKeepCount}, -- จำนวน Pet ที่จะเก็บไว้เมื่อขาย Pet
+    SELL_PET_KEEP_WEIGHT = ${config.sellPetKeepWeight}, -- จำนวน Pet ที่จะเก็บไว้เมื่อขาย Pet ตามน้ำหนัก
+    OpenEgg = ${config.openEgg}, -- true/false เปิด Auto Open Egg
+    PlaceEgg = ${config.placeEgg}, -- true/false เปิด Auto Place Egg
+    BuyEgg = ${config.buyEgg}, -- true/false เปิด Auto Buy Egg
+    MaxCropInFarm = ${config.maxCropInFarm}, -- จำนวน Crop ที่ต้องการปลูกในฟาร์ม
+    UpgradePetSlot = ${config.upgradePetSlot}, -- true/false เปิด Auto Upgrade Pet Slot
+    UpgradeEggSlot = ${config.upgradeEggSlot}, -- true/false เปิด Auto Upgrade Egg Slot
+    UpgradePetInventory = ${config.upgradePetInventory}, -- true/false เปิด Auto Upgrade Pet Inventory
+    AUTOFEEDPETS = ${config.autoFeedPets}, -- true/false เปิด Auto Feed Pet
+    AutoEvent = ${config.autoEvent}, -- true/false เปิด ส่ง Event
+    AutoFavEvent = ${config.autoFavEvent}, -- true/false เปิด Auto Fav Event
+    OPEN_SEEDPACK = ${config.openSeedPack}, -- true/false เปิด Seed Pack
+    OpenFlowerSeedPack = ${config.openFlowerSeedPack}, -- ถ้ามี Flower Seed Pack มากกว่าเท่าไหร่ถึงจะเปิด
+    MoneyEnough = ${config.moneyEnough}, -- ต้องมีเงินมากกว่าเท่าไหร่ถึงจะซื้อ Egg and Item
+    Fpsboost = ${config.fpsBoost}, -- true/false เปิด Fpsboost
+    WEBHOOK_URL = "${config.webhookUrl}", -- Webhook ที่จะส่งไปที่ Discord
+    NOTIFY_PETS = { ${config.notifyPets.map(pet => `"${pet}"`).join(', ')} },
+    CollectBatch = ${config.collectBatch}, -- จำนวนการเก็บของในฟาร์มต่อครั้ง
+    COLLECT_MINUTES = { -- กำหนดเวลาในการเก็บของในฟาร์ม ตามจำนวนเงินที่มี
+${config.collectMinutes.map(item => `        { Money = ${item.money}, Minutes = ${item.minutes} },`).join('\n')}
+    },
+}
+--------------------------------------------------------------------`;
+
+            document.getElementById('configOutput').textContent = configScript;
+            document.getElementById('configOutput').style.display = 'block';
+            
+            showToast('Config สร้างเสร็จแล้ว! คุณสามารถคัดลอกได้ด้านล่าง');
+        }
+
+        // Copy config to clipboard
+        function copyConfig() {
+            const configText = document.getElementById('configOutput').textContent;
+            if (configText) {
+                navigator.clipboard.writeText(configText).then(() => {
+                    showToast('คัดลอก Config เรียบร้อยแล้ว!');
+                });
+            } else {
+                showToast('กรุณาสร้าง Config ก่อน', 'error');
+            }
+        }
+
+        // Load default config
+        function loadDefaultConfig() {
+            const confirmMessage = currentLanguage === 'en' 
+                ? 'Do you want to load default settings? Current settings will be lost.'
+                : 'คุณต้องการโหลดค่าเริ่มต้นใหม่หรือไม่? การตั้งค่าปัจจุบันจะหายไป';
+            
+            if (confirm(confirmMessage)) {
+                location.reload();
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            let displayMessage = message;
+            
+            // Translate common messages
+            if (currentLanguage === 'en') {
+                if (message.includes('Config สร้างเสร็จแล้ว')) {
+                    displayMessage = 'Config generated successfully! You can copy it below.';
+                } else if (message.includes('คัดลอก Config เรียบร้อยแล้ว')) {
+                    displayMessage = 'Config copied successfully!';
+                } else if (message.includes('กรุณาสร้าง Config ก่อน')) {
+                    displayMessage = 'Please generate config first.';
+                }
+            }
+            
+            toast.textContent = displayMessage;
+            toast.className = `toast show ${type === 'error' ? 'error' : ''}`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLists();
+            updateFormValues();
+            updateLanguage(); // Initialize language settings
+        });
+
+        // Add event listeners for Enter key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {    
+                const activeElement = document.activeElement;
+                const parentDiv = activeElement.closest('.add-item');
+                if (parentDiv) {
+                    const button = parentDiv.querySelector('.btn-primary');
+                    if (button) {
+                        button.click();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
