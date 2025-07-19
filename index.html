@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Config Generator - Updated 12/07/25</title>
+    <title>Game Config Generator - Updated 19/07/25</title>
     <style>
         * {
             margin: 0;
@@ -237,7 +237,7 @@
     <div class="container">
         <div class="header">
             <h1>🎮 Game Config Generator</h1>
-            <p>Config Update 12/07/25 22:15 - Generate your custom Lua configuration</p>
+            <p>Config Update 19/07/25 23:53 - Generate your custom Lua configuration</p>
         </div>
 
         <div class="content">
@@ -337,7 +337,6 @@
                             </div>
                             <div class="tag-input" id="upgradePets"></div>
                         </div>
-
                         <div class="form-group">
                             <label>Pets for Dino Evolution:</label>
                             <div class="add-item">
@@ -348,7 +347,6 @@
                             </div>
                             <div class="tag-input" id="dinoPets"></div>
                         </div>
-
                         <div class="form-group">
                             <label>Pets for Mutation:</label>
                             <div class="add-item">
@@ -470,8 +468,8 @@
                             <label for="upgradePetInventory">Upgrade Pet Inventory</label>
                         </div>
                         <div class="checkbox-group">
-                            <input type="checkbox" id="takeAncientPlant" checked>
-                            <label for="takeAncientPlant">Take Ancient Plant</label>
+                            <input type="checkbox" id="takeEventPlant" checked>
+                            <label for="takeEventPlant">Take Event Plant</label>
                         </div>
                         <div class="checkbox-group">
                             <input type="checkbox" id="autoFeedPets" checked>
@@ -517,9 +515,33 @@
                             <input type="number" id="collectBatch" value="20" min="1">
                         </div>
                         <div class="form-group">
+                            <label>Notify Pet Weight:</label>
+                            <input type="number" id="notifyPetWeight" value="10" min="1">
+                        </div>
+                        <div class="form-group">
                             <label>Webhook URL:</label>
                             <input type="url" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="section">
+                <h2>🔔 Notification Settings</h2>
+                <div class="grid">
+                    <div>
+                        <div class="form-group">
+                            <label>Notify Seeds:</label>
+                            <div class="add-item">
+                                <input type="text" id="notifySeedInput" placeholder="Enter seed name">
+                                <button class="btn" onclick="addTag('notifySeeds', 'notifySeedInput')">Add</button>
+                            </div>
+                            <div class="tag-input" id="notifySeeds"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <!-- Notification pets already handled in Pet Settings -->
                     </div>
                 </div>
             </div>
@@ -558,21 +580,21 @@
         // Pet and Egg lists
         const PETS = [
             "Golden Lab", "Dog", "Bunny", "Grey Mouse", "Brown Mouse", "Squirrel", 
-            "Red Giant Ant", "Red Fox", "Snail", "Giant Ant", "Caterpillar", 
-            "Praying Mantis", "Dragonfly", "Starfish", "Seagull", "Crab", 
-            "Butterfly", "Moth", "Tarantula Hawk", "Wasp", "Hedgehog", "Snake", 
-            "Meerkat", "Owl", "Kiwi", "Echo Frog", "Scarlet Macaw", "Peacock", 
-            "Capybara", "Ostrich", "Axolotl", "Seal", "Sea Turtle", "Orangutan", 
-            "Flamingo", "Toucan", "Pterodactyl", "Raptor", "Triceratops", 
-            "Stegosaurus", "Brontosaurus", "T-Rex", "Iguanodon", "Dilophosaurus", 
-            "Ankylosaurus", "Spinosaurus", "Parasaurolophus", "Disco Bee", 
-            "Blood Owl", "Night Owl", "Fennec Fox"
+            "Red Giant Ant", "Red Fox", "Snail", "Giant Ant", "Caterpillar",
+            "Praying Mantis", "Dragonfly", "Starfish", "Seagull", "Crab",
+            "Butterfly", "Moth", "Tarantula Hawk", "Wasp", "Hedgehog", "Snake",
+            "Meerkat", "Owl", "Kiwi", "Echo Frog", "Scarlet Macaw", "Peacock",
+            "Capybara", "Ostrich", "Axolotl", "Seal", "Sea Turtle", "Orangutan",
+            "Flamingo", "Toucan", "Pterodactyl", "Raptor", "Triceratops",
+            "Stegosaurus", "Brontosaurus", "T-Rex", "Iguanodon", "Dilophosaurus",
+            "Ankylosaurus", "Spinosaurus", "Parasaurolophus", "Disco Bee",
+            "Blood Owl", "Night Owl", "Fennec Fox", "Raccoon", "Queen Bee"
         ];
 
         const EGGS = [
-            "Common Egg", "Mythical Egg", "Bug Egg", "Common Summer Egg", 
-            "Rare Summer Egg", "Bee Egg", "Anti‑Bee Egg", "Paradise Egg", 
-            "Dinosaur Egg", "Primal Egg", "Oasis Egg", "Night Egg"
+            "Common Egg", "Legendary Egg", "Mythical Egg", "Bug Egg", "Common Summer Egg",
+            "Rare Summer Egg", "Bee Egg", "Anti Bee Egg", "Paradise Egg",
+            "Dinosaur Egg", "Primal Egg", "Oasis Egg", "Night Egg","Zen Egg"
         ];
 
         // Initialize with default values
@@ -588,13 +610,13 @@
             dinoPets: ["Dog"],
             mutationPets: ["Dog"],
             notifyPets: ["Dragonfly", "Raccoon", "Red Fox", "Praying Mantis", "Queen Bee"],
+            notifySeeds: ["Mable Apple"],
             craftEvents: [
-                { name: "Crafters Seed Pack", amount: 2 },
                 { name: "Anti Bee Egg", amount: 2 }
             ],
             eventShop: [
-                { name: "Summer Seed Pack", amount: 2 },
-                { name: "Oasis Egg", amount: 2 }
+                { name: "Zen Seed Pack", amount: 2 },
+                { name: "Zen Egg", amount: 2 }
             ],
             collectMinutes: [
                 { money: 100000, minutes: 10 },
@@ -800,7 +822,7 @@
                 UpgradePetSlot: document.getElementById('upgradePetSlot').checked,
                 UpgradeEggSlot: document.getElementById('upgradeEggSlot').checked,
                 UpgradePetInventory: document.getElementById('upgradePetInventory').checked,
-                TakeAncientPlant: document.getElementById('takeAncientPlant').checked,
+                TakeEventPlant: document.getElementById('takeEventPlant').checked,
                 AUTOFEEDPETS: document.getElementById('autoFeedPets').checked,
                 AutoFavEvent: document.getElementById('autoFavEvent').checked,
                 OPEN_SEEDPACK: document.getElementById('openSeedPack').checked,
@@ -808,6 +830,8 @@
                 MoneyEnough: parseInt(document.getElementById('moneyEnough').value),
                 Fpsboost: document.getElementById('fpsBoost').checked,
                 WEBHOOK_URL: document.getElementById('webhookUrl').value,
+                NOTIFY_PETWEIGHT: parseInt(document.getElementById('notifyPetWeight').value),
+                NOTIFY_SEEDS: getTagValues('notifySeeds'),
                 NOTIFY_PETS: getTagValues('notifyPets'),
                 CollectBatch: parseInt(document.getElementById('collectBatch').value),
                 COLLECT_MINUTES: getMoneyConditions()
@@ -868,7 +892,7 @@ ${config.EVENTSHOP.map(item => `        { Name = "${item.name}", Amount = ${item
     UpgradePetSlot = ${config.UpgradePetSlot}, -- true/false เปิด Auto Upgrade Pet Slot
     UpgradeEggSlot = ${config.UpgradeEggSlot}, -- true/false เปิด Auto Upgrade Egg Slot
     UpgradePetInventory = ${config.UpgradePetInventory}, -- true/false เปิด Auto Upgrade Pet Inventory
-    TakeAncientPlant = ${config.TakeAncientPlant}, -- true/false เปิด Take Ancient Plant
+    TakeEventPlant = ${config.TakeEventPlant}, -- true/false เปิด Take Event Plant
     AUTOFEEDPETS = ${config.AUTOFEEDPETS}, -- true/false เปิด Auto Feed Pet
     AutoFavEvent = ${config.AutoFavEvent}, -- true/false เปิด Auto Fav Event
     OPEN_SEEDPACK = ${config.OPEN_SEEDPACK}, -- true/false เปิด Seed Pack
@@ -876,15 +900,15 @@ ${config.EVENTSHOP.map(item => `        { Name = "${item.name}", Amount = ${item
     MoneyEnough = ${config.MoneyEnough}, -- ต้องมีเงินมากกว่าเท่าไหร่ถึงจะซื้อ Egg and Item
     Fpsboost = ${config.Fpsboost}, -- true/false เปิด Fpsboost
     WEBHOOK_URL = "${config.WEBHOOK_URL}", -- Webhook ที่จะส่งไปที่ Discord
+    NOTIFY_PETWEIGHT = ${config.NOTIFY_PETWEIGHT}, -- น้ำหนักของ Pet
+    NOTIFY_SEEDS = { ${config.NOTIFY_SEEDS.map(seed => `"${seed}"`).join(', ')} },
     NOTIFY_PETS = { ${config.NOTIFY_PETS.map(pet => `"${pet}"`).join(', ')} },
     CollectBatch = ${config.CollectBatch}, -- จำนวนการเก็บของในฟาร์มต่อครั้ง
     COLLECT_MINUTES = { -- กำหนดเวลาในการเก็บของในฟาร์ม ตามจำนวนเงินที่มี
 ${config.COLLECT_MINUTES.map(item => `        { Money = ${item.money}, Minutes = ${item.minutes} },`).join('\n')}
     },
 }
-
 --------------------------------------------------------------------`;
-
             return lua;
         }
 
